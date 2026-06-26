@@ -169,6 +169,41 @@ time,object,position,affordance,risk,confidence,action,result
 002,box,front,move_around,medium,0.61,stop_and_inspect,unknown_obstacle_logged
 ```
 
+## Grounding Rules
+
+Grounding rules connect raw sensor readings to semantic quality labels. They are the bridge between numbers and meaning: when a value crosses a threshold, the robot gains a named state it can reason about.
+
+Grounding rules use row type `i` (instrument) with eight columns:
+
+```
+description ; i ; lt/gt ; sensor ; unit ; quality ; threshold ; current_val
+```
+
+| Column | Meaning |
+|--------|---------|
+| `description` | Human-readable label for the condition |
+| `i` | Row type: instrument / sensor rule |
+| `lt` or `gt` | Fires when sensor reading is less than (`lt`) or greater than (`gt`) the threshold |
+| `sensor` | Name of the sensor or measured variable |
+| `unit` | Unit of measurement |
+| `quality` | The semantic label assigned when the rule fires |
+| `threshold` | The boundary value |
+| `current_val` | An example reading that triggers the rule |
+
+Examples from `log.csv`:
+
+| Description | Sensor | Operator | Threshold | Example value | Label |
+|-------------|--------|----------|-----------|---------------|-------|
+| battery running low | `battery_%` | `lt` | 75 | 30 | `stat low` |
+| battery sufficient | `battery_%` | `gt` | 75 | 80 | `stat full` |
+| motor overheating | `motor_temp_c` | `gt` | 35 | 70 | `stat hot` |
+| branch may snap | `branch_integrity` | `lt` | 1.0 | 0.3 | `stat broken` |
+| grip failed | `grip_success` | `lt` | 1.0 | 0.5 | `problem` |
+| voices raised | `voice_pitch_hz` | `gt` | 200 | 280 | `stat hot` |
+| trust damaged | `trust_score` | `lt` | 0.8 | 0.3 | `stat broken` |
+
+The quality labels produced by grounding rules are the same vocabulary used in triangle `a;stat` rows. This is the link: a sensor reading fires a grounding rule, the rule emits a quality label, and the triangle looks up that label to choose a response.
+
 ## Triangles
 
 A triangle is a small structured program for a situation: it names an activity, lists the states that can arise, pairs each state with a response, and ends when the goal is reached.
