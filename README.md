@@ -176,7 +176,7 @@ A triangle is a small structured program for a situation: it names an activity, 
 Triangles live in the `triangles/` folder as semicolon-delimited CSV files with eight columns:
 
 ```
-description ; row_type ; subtype ; thing1 ; thing2 ; quality ; low_val ; high_val
+description ; row_type ; subtype ; thing1 ; thing2 ; quality ; current_val ; threshold
 ```
 
 Row types:
@@ -208,12 +208,12 @@ Each triangle follows this shape:
 ;;;;;;;;
 [goal description];c;activity;[actor];[target];;[start];[end];
 ;;;;;;;;
-[situation];a;stat;[thing1];[thing2];[quality];[low];[high];
-;c;mode;[thing1];[thing2];[action];[low];[high];
+[situation];a;stat;[thing1];[thing2];[quality];[current];[threshold];
+;c;mode;[thing1];[thing2];[action];[current];[threshold];
 ;;;;;;;;
 ... more situation + response pairs ...
 ;;;;;;;;
-[goal achieved];c;activity;[actor];[target];goal [type]+[type];[high];[high];
+[goal achieved];c;activity;[actor];[target];goal [type]+[type];[current];[threshold];
 ;;;;;;;;
 ```
 
