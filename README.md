@@ -169,6 +169,76 @@ time,object,position,affordance,risk,confidence,action,result
 002,box,front,move_around,medium,0.61,stop_and_inspect,unknown_obstacle_logged
 ```
 
+## Triangles
+
+A triangle is a small structured program for a situation: it names an activity, lists the states that can arise, pairs each state with a response, and ends when the goal is reached.
+
+Triangles live in the `triangles/` folder as semicolon-delimited CSV files with eight columns:
+
+```
+description ; row_type ; subtype ; thing1 ; thing2 ; quality ; low_val ; high_val
+```
+
+Row types:
+
+| Type | Meaning |
+|------|---------|
+| `c;activity` | Triangle header or goal line |
+| `a;stat` | A situation the robot may find itself in |
+| `c;mode` | The response action for that situation |
+
+Quality vocabulary (drawn from grounding rules):
+
+| Quality | Meaning |
+|---------|---------|
+| `stat empty` | nothing present, no model yet |
+| `stat vapor` | present but unclear or ambiguous |
+| `stat soft` | low resistance, low risk |
+| `stat rough` | high resistance, increased pressure needed |
+| `stat broken` | path blocked, structure failed, trust damaged |
+| `stat hot` | overload, conflict, or excess activity |
+| `stat cold` | underload, withdrawal, or dead silence |
+| `stat heavy` | imbalance, fatigue, or shifted weight |
+| `pattern` | structure detected, sequence possible |
+| `problem` | explicit failure signal |
+
+Each triangle follows this shape:
+
+```
+;;;;;;;;
+[goal description];c;activity;[actor];[target];;[start];[end];
+;;;;;;;;
+[situation];a;stat;[thing1];[thing2];[quality];[low];[high];
+;c;mode;[thing1];[thing2];[action];[low];[high];
+;;;;;;;;
+... more situation + response pairs ...
+;;;;;;;;
+[goal achieved];c;activity;[actor];[target];goal [type]+[type];[high];[high];
+;;;;;;;;
+```
+
+Example — `triangles/triangle_first_contact.csv`:
+
+```
+;;;;;;;;
+first contact — sense perceive choose act log;c;activity;robot;world;;20;40;
+;;;;;;;;
+scene unread, no prior model;a;stat;robot001;world001;stat empty;10;20;
+;c;mode;robot001;world001;take_snapshot;15;25;
+;;;;;;;;
+objects detected, affordances unclear;a;stat;robot001;scene001;stat vapor;30;40;
+;c;mode;robot001;scene001;label_candidates;35;45;
+;;;;;;;;
+path blocked, risk unknown;a;stat;robot001;path001;stat broken;20;30;
+;c;mode;robot001;path001;stop_and_assess;25;35;
+;;;;;;;;
+safe target within reach;a;stat;robot001;object001;stat soft;50;60;
+;c;mode;robot001;object001;reach_toward;55;65;
+;;;;;;;;
+first action complete, world model seeded;c;activity;robot;world;goal loc+bond;80;90;
+;;;;;;;;
+```
+
 ## Philosophical Test
 
 The real question is:

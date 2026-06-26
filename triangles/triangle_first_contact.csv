@@ -1,0 +1,17 @@
+;;;;;;;;
+first contact — sense perceive choose act log;c;activity;robot;world;;20;40;
+;;;;;;;;
+scene unread, no prior model;a;stat;robot001;world001;stat empty;10;20;
+;c;mode;robot001;world001;take_snapshot;15;25;
+;;;;;;;;
+objects detected, affordances unclear;a;stat;robot001;scene001;stat vapor;30;40;
+;c;mode;robot001;scene001;label_candidates;35;45;
+;;;;;;;;
+path blocked, risk unknown;a;stat;robot001;path001;stat broken;20;30;
+;c;mode;robot001;path001;stop_and_assess;25;35;
+;;;;;;;;
+safe target within reach;a;stat;robot001;object001;stat soft;50;60;
+;c;mode;robot001;object001;reach_toward;55;65;
+;;;;;;;;
+first action complete, world model seeded;c;activity;robot;world;goal loc+bond;80;90;
+;;;;;;;;
