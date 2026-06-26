@@ -274,6 +274,40 @@ first action complete, world model seeded;c;activity;robot;world;goal loc+bond;8
 ;;;;;;;;
 ```
 
+## The Log
+
+`log.csv` is the robot's running record. It is a single flat file that holds scenario sketches, situation-response drafts, grounding rules, and copies of triangles — all in the same eight-column format, separated by blank lines.
+
+```
+description ; row_type ; subtype ; thing1 ; thing2 ; quality ; current_val ; threshold
+```
+
+A scenario begins with a free-text heading in the first column (the rest empty), followed by one or more typed rows, and ends with a separator line:
+
+```
+;;;;;;;;
+the vase is falling off the table;;;;;;;;
+the vase is falling off the table;a;stat;thing993;thing553;stability;30;50;
+;;;;;;;;
+```
+
+Row types found in the log:
+
+| Type | Subtype | Meaning |
+|------|---------|---------|
+| `a` | `stat` | Static assertion — a state that holds right now |
+| `a` | `dyn` | Dynamic assertion — a state that is changing |
+| `a` | `sensor` | Assertion derived from a sensor reading |
+| `c` | `activity` | Ongoing activity or goal frame |
+| `c` | `loc` | Location or position claim |
+| `c` | `rel` | Relation between two things |
+| `c` | `mode` | Response action chosen for a situation |
+| `c` | `transform` | A transformation from one state to another |
+| `i` | `lt` / `gt` | Grounding rule: fires when sensor crosses threshold |
+| `q` | `criterion` | A question or decision criterion |
+
+The log is the drafting ground. Scenario fragments are written here first, then refined into standalone triangle files in `triangles/`. Grounding rules live in the log until they are stable enough to be loaded by the boot system at startup.
+
 ## Philosophical Test
 
 The real question is:
